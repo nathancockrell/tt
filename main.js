@@ -1,9 +1,42 @@
 // Select the form element
 const eventForm = document.getElementById('eventForm');
+const timelineCanvas = document.getElementById('timelineCanvas');
+const ctx = timelineCanvas.getContext('2d');
+
+// Select modal elements
+const eventModal = document.getElementById('eventModal');
+const closeModalBtn = document.querySelector('.close');
+const editEventForm = document.getElementById('editEventForm');
+
+// Global variables
+let selectedScore = null;
+let events = JSON.parse(localStorage.getItem('events')) || [];
+let selectedEventIndex = null;
+
 
 // Create score buttons and append to the scoreButtons div
 const scoreButtonsContainer = document.getElementById('scoreButtons');
-let selectedScore = null;
+
+// Set today's date as default in the date input field
+function setTodaysDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(today.getDate()).padStart(2, '0');
+    
+    const formattedDate = `${year}-${month}-${day}`;
+    document.getElementById('date').value = formattedDate;
+}
+
+// Call the function to set the date when the page loads
+window.onload = function() {
+    setTodaysDate();
+    generateScoreButtons(); // Generate the score buttons
+    renderTimeline(); // Render the timeline with existing events
+};
+
+
+
 
 // Function to generate score buttons
 function generateScoreButtons() {
@@ -13,35 +46,32 @@ function generateScoreButtons() {
         button.textContent = i;
         button.value = i;
 
-        // Add click event listener to select score
         button.addEventListener('click', () => handleScoreSelect(i, button));
 
         scoreButtonsContainer.appendChild(button);
     }
 }
 
-// Function to handle score selection
+// Handle form submission
+eventForm.addEventListener('submit', handleFormSubmit);
+editEventForm.addEventListener('submit', handleEditSubmit);
+
+// Handle score selection
 function handleScoreSelect(score, button) {
     selectedScore = score;
-
-    // Remove selected class from all buttons and add it to the clicked one
     const buttons = scoreButtonsContainer.querySelectorAll('button');
     buttons.forEach(btn => btn.classList.remove('selected'));
-
     button.classList.add('selected');
 }
 
-// Function to handle form submission
+// Handle event form submission
 function handleFormSubmit(event) {
-    event.preventDefault();  // Prevent page refresh on form submit
-
-    // Check if a score is selected
+    event.preventDefault();
     if (selectedScore === null) {
         alert('Please select a score');
         return;
     }
 
-    // Get form values
     const eventData = {
         date: document.getElementById('date').value,
         startTime: document.getElementById('startTime').value,
@@ -51,31 +81,72 @@ function handleFormSubmit(event) {
         score: selectedScore
     };
 
-    // Save the data to localStorage as a JSON string
-    saveEventData(eventData);
-    
-    // Clear form after submission
-    eventForm.reset();
-    selectedScore = null; // Reset score selection
-    scoreButtonsContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
-}
-
-// Function to save event data to localStorage
-function saveEventData(eventData) {
-    // Get existing events from localStorage
-    let events = JSON.parse(localStorage.getItem('events')) || [];
-
-    // Add new event to the array
     events.push(eventData);
-
-    // Save updated array back to localStorage
     localStorage.setItem('events', JSON.stringify(events));
 
-    console.log('Event saved:', eventData);
+    eventForm.reset();
+    selectedScore = null;
+    scoreButtonsContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
+
+    renderTimeline();
 }
 
-// Attach submit event listener to the form
-eventForm.addEventListener('submit', handleFormSubmit);
+// Render the timeline on the canvas
+function renderTimeline() {
+    ctx.clearRect(0, 0, timelineCanvas.width, timelineCanvas.height);
+    const blockHeight = 60;
+    events.forEach((event, index) => {
+        const yPosition = index * (blockHeight + 10) + 20;
+        ctx.fillStyle = '#007bff';
+        ctx.fillRect(10, yPosition, timelineCanvas.width - 20, blockHeight);
+        ctx.fillStyle = '#fff';
+        ctx.font = '16px Arial';
+        ctx.fillText(event.title, 20, yPosition + 30);
 
-// Generate the score buttons on page load
-generateScoreButtons();
+        // Store the event position for click handling
+        events[index].yPosition = yPosition;
+    });
+}
+
+// Handle clicking on the canvas to edit event
+timelineCanvas.addEventListener('click', (event) => {
+    const clickY = event.offsetY;
+    const clickedEvent = events.find(evt => clickY >= evt.yPosition && clickY <= evt.yPosition + 60);
+    if (clickedEvent) {
+        openModal(clickedEvent);
+    }
+});
+
+// Open modal with event data
+function openModal(event) {
+    const { title, description, startTime, endTime } = event;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editDescription').value = description;
+    document.getElementById('editStartTime').value = startTime;
+    document.getElementById('editEndTime').value = endTime;
+    selectedEventIndex = events.indexOf(event);
+    eventModal.style.display = 'flex';
+}
+
+// Close modal
+closeModalBtn.addEventListener('click', () => {
+    eventModal.style.display = 'none';
+});
+
+// Handle editing and saving event
+function handleEditSubmit(event) {
+    event.preventDefault();
+    const updatedEvent = {
+        ...events[selectedEventIndex],
+        title: document.getElementById('editTitle').value,
+        description: document.getElementById('editDescription').value,
+        startTime: document.getElementById('editStartTime').value,
+        endTime: document.getElementById('editEndTime').value,
+    };
+
+    events[selectedEventIndex] = updatedEvent;
+    localStorage.setItem('events', JSON.stringify(events));
+
+    eventModal.style.display = 'none';
+    renderTimeline();
+}

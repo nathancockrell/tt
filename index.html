@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form with LocalStorage</title>
+    <title>Form with LocalStorage and Timeline</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -38,6 +38,37 @@
             </div>
             <button type="submit">Save Event</button>
         </form>
+    </div>
+    <div class="container">
+        <!-- Canvas for timeline -->
+        <canvas id="timelineCanvas" width="400" height="800"></canvas>
+
+        <!-- Modal for editing event -->
+        <div id="eventModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Edit Event</h2>
+                <form id="editEventForm">
+                    <div class="form-group">
+                        <label for="editTitle">Title:</label>
+                        <input type="text" id="editTitle" name="editTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Description:</label>
+                        <textarea id="editDescription" name="editDescription" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editStartTime">Start Time:</label>
+                        <input type="time" id="editStartTime" name="editStartTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEndTime">End Time:</label>
+                        <input type="time" id="editEndTime" name="editEndTime" required>
+                    </div>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <script src="main.js"></script>
