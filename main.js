@@ -13,6 +13,21 @@ let selectedScore = null;
 let events = JSON.parse(localStorage.getItem('events')) || [];
 let selectedEventIndex = null;
 
+// temp history display
+const histbtn = document.getElementById("showhistory");
+const histdisp = document.getElementById("history-display");
+let shown=false;
+histbtn.addEventListener("click",()=>{
+    if(shown){
+        histdisp.style.display = 'none'
+        shown=false;
+    }else{
+        histdisp.style.display = 'block'
+        shown=true;
+    }
+    histdisp.innerHTML=localStorage.getItem('events')
+})
+
 
 // Create score buttons and append to the scoreButtons div
 const scoreButtonsContainer = document.getElementById('scoreButtons');
