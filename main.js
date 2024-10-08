@@ -109,14 +109,29 @@ function handleFormSubmit(event) {
 // Render the timeline on the canvas
 function renderTimeline() {
     ctx.clearRect(0, 0, timelineCanvas.width, timelineCanvas.height);
-    const blockHeight = 60;
-    events.forEach((event, index) => {
-        const yPosition = index * (blockHeight + 10) + 20;
-        ctx.fillStyle = '#007bff';
-        ctx.fillRect(10, yPosition, timelineCanvas.width - 20, blockHeight);
-        ctx.fillStyle = '#fff';
+    const blockHeight = 50;
+    for(let i = 0; i<12; i++){
+        ctx.fillStyle="#000000";
         ctx.font = '16px Arial';
-        ctx.fillText(event.title, 20, yPosition + 30);
+        ctx.fillText(i*2, 0, (2*(blockHeight*i))+16);
+        ctx.strokeRect(0,(blockHeight*i*2)-1,timelineCanvas.width,0);
+    }
+    events.forEach((event, index) => {
+        let begin = event.startTime;
+        let startHour=begin.slice(0,2);
+        let startMin = begin.slice(3);
+        let end = event.endTime;
+        let endHour = event.endTime.slice(0,2);
+        let endMin = event.endTime.slice(3);
+        
+
+        const yPosition = ((Number(startHour))* (blockHeight))+(Number(startMin)*(5/6));
+        ctx.fillStyle = '#007bff';
+        ctx.fillRect(20, yPosition, timelineCanvas.width - 20, blockHeight);
+        ctx.fillStyle = '#fff';
+        ctx.strokeRect(20, yPosition, timelineCanvas.width - 20, blockHeight)
+        ctx.font = '16px Arial';
+        ctx.fillText(event.title, 20, yPosition + 16);
 
         // Store the event position for click handling
         events[index].yPosition = yPosition;
