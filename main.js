@@ -84,8 +84,7 @@ function handleScoreSelect(score, button) {
 function handleFormSubmit(event) {
     event.preventDefault();
     if (selectedScore === null) {
-        alert('Please select a score');
-        return;
+        selectedScore="";
     }
 
     const eventData = {
