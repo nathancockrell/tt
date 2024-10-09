@@ -41,6 +41,7 @@ function setTodaysDate() {
     
     const formattedDate = `${year}-${month}-${day}`;
     document.getElementById('date').value = formattedDate;
+    document.getElementById("selectDate").value = formattedDate;
 }
 
 // Call the function to set the date when the page loads
@@ -55,7 +56,7 @@ window.onload = function() {
 
 // Function to generate score buttons
 function generateScoreButtons() {
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 0; i < 10; i++) {
         const button = document.createElement('button');
         button.type = 'button';
         button.textContent = i;
@@ -110,13 +111,22 @@ function handleFormSubmit(event) {
 function renderTimeline() {
     ctx.clearRect(0, 0, timelineCanvas.width, timelineCanvas.height);
     const blockHeight = 50;
-    for(let i = 0; i<12; i++){
+    for(let i = 0; i<24; i++){
         ctx.fillStyle="#000000";
         ctx.font = '16px Arial';
-        ctx.fillText(i*2, 0, (2*(blockHeight*i))+16);
-        ctx.strokeRect(0,(blockHeight*i*2)-1,timelineCanvas.width,0);
+        ctx.fillText(i, 0, ((blockHeight*i))+16);
+        ctx.strokeRect(0,(blockHeight*i)-1,timelineCanvas.width,0);
     }
-    events.forEach((event, index) => {
+
+    let todaysEvents=[];
+    let selectedDate=document.getElementById("selectDate").value;
+
+    events.forEach((event)=>{
+        if(event.date==selectedDate){
+            todaysEvents.push(event);
+        }
+    })
+    todaysEvents.forEach((event, index) => {
         let begin = event.startTime;
         let startHour=begin.slice(0,2);
         let startMin = begin.slice(3);
@@ -180,3 +190,7 @@ function handleEditSubmit(event) {
     eventModal.style.display = 'none';
     renderTimeline();
 }
+
+document.getElementById("selectDate").addEventListener("change", ()=>{
+    renderTimeline();
+})

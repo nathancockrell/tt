@@ -21,13 +21,18 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width:400px;
+    min-width: 300px;
+    max-width:100%;
+    margin-bottom: 15px;
 }
 .container2 {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    width:400px;
+    min-width: 300px;
+    max-width:100%;
 }
 
 h1 {
@@ -35,14 +40,26 @@ h1 {
     margin-bottom: 20px;
 }
 
-.form-group {
+#eventForm{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.form-group1 {
+    margin-bottom: 15px;
+    width: 100%;
+    /* display: flex; */
+}
+.form-group2 {
+    width:50%;
     margin-bottom: 15px;
 }
 
 label {
     display: block;
     margin-bottom: 5px;
-    font-weight: bold;
+    font-weight: normal;
+    color:grey;
 }
 
 input, textarea, button {
@@ -50,7 +67,9 @@ input, textarea, button {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 20px;
 }
+textarea{resize:none;}
 
 button {
     background-color: #28a745;
