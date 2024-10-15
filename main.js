@@ -16,16 +16,38 @@ let selectedEventIndex = null;
 // temp history display
 const histbtn = document.getElementById("showhistory");
 const histdisp = document.getElementById("history-display");
-let shown=false;
+let shown="graph";
 histbtn.addEventListener("click",()=>{
-    if(shown){
-        histdisp.style.display = 'none'
-        shown=false;
-    }else{
+    if(shown==="graph"){
         histdisp.style.display = 'block'
-        shown=true;
+        histbtn.style.backgroundColor="#545454"
+        timelineCanvas.style.display="none"
+        graphbtn.style.backgroundColor="#000000"
+
+        shown="list";
+    }else{
     }
-    histdisp.innerHTML=localStorage.getItem('events')
+})
+const graphbtn = document.getElementById("showGraph")
+graphbtn.addEventListener("click", ()=>{
+    if(shown==="list"){
+        timelineCanvas.style.display = 'block'
+        graphbtn.style.backgroundColor="#545454"
+        histdisp.style.display="none"
+        histbtn.style.backgroundColor="#000000"
+
+        shown="graph";
+    }else{
+    }
+})
+
+document.getElementById("close").addEventListener("click",()=>{
+    document.getElementById("formCC").style.display="none";
+    document.getElementById("trigger").style.display="block";
+})
+document.getElementById("trigger").addEventListener("click",()=>{
+    document.getElementById("formCC").style.display="flex";
+    document.getElementById("trigger").style.display="none";
 })
 
 
@@ -42,6 +64,7 @@ function setTodaysDate() {
     const formattedDate = `${year}-${month}-${day}`;
     document.getElementById('date').value = formattedDate;
     document.getElementById("selectDate").value = formattedDate;
+    document.getElementById("today").textContent=formattedDate;
 }
 
 // Call the function to set the date when the page loads
@@ -74,10 +97,16 @@ editEventForm.addEventListener('submit', handleEditSubmit);
 
 // Handle score selection
 function handleScoreSelect(score, button) {
-    selectedScore = score;
     const buttons = scoreButtonsContainer.querySelectorAll('button');
     buttons.forEach(btn => btn.classList.remove('selected'));
+    if(selectedScore==score){
+        selectedScore=null;    
+    }else{
+        selectedScore = score;
+    
     button.classList.add('selected');
+    }
+    
 }
 
 // Handle event form submission
@@ -102,18 +131,20 @@ function handleFormSubmit(event) {
     eventForm.reset();
     selectedScore = null;
     scoreButtonsContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
-
+    setTodaysDate();
     renderTimeline();
+    triggerNoti("Event saved.")
+    // document.getElementById("formCC").style.display="none"
 }
 
 // Render the timeline on the canvas
 function renderTimeline() {
     ctx.clearRect(0, 0, timelineCanvas.width, timelineCanvas.height);
-    const blockHeight = 50;
+    const blockHeight = timelineCanvas.height/24;
     for(let i = 0; i<24; i++){
         ctx.fillStyle="#000000";
         ctx.font = '16px Arial';
-        ctx.fillText(i, 0, ((blockHeight*i))+16);
+        ctx.fillText(i+":00", 0, ((blockHeight*i))+16);
         ctx.strokeRect(0,(blockHeight*i)-1,timelineCanvas.width,0);
     }
 
@@ -132,29 +163,69 @@ function renderTimeline() {
         let end = event.endTime;
         let endHour = event.endTime.slice(0,2);
         let endMin = event.endTime.slice(3);
-        
+        // console.log("AHDH",startHour, startMin," ", endHour,endMin)
+        let length = (endHour-startHour) + (endMin-startMin)/60;
+        if(length<0.33){
+            length=.33;
+        }
 
-        const yPosition = ((Number(startHour))* (blockHeight))+(Number(startMin)*(5/6));
-        ctx.fillStyle = '#007bff';
-        ctx.fillRect(20, yPosition, timelineCanvas.width - 20, blockHeight);
+        const yPosition = ((Number(startHour))* (blockHeight))+(Number(startMin)/60);
+        const xOffset = 50;
+        ctx.fillStyle = 'rgb(80,80,80)';
+        ctx.fillRect(xOffset, yPosition, timelineCanvas.width - xOffset, blockHeight*length);
         ctx.fillStyle = '#fff';
-        ctx.strokeRect(20, yPosition, timelineCanvas.width - 20, blockHeight)
-        ctx.font = '16px Arial';
-        ctx.fillText(event.title, 20, yPosition + 16);
+        ctx.strokeRect(xOffset, yPosition, timelineCanvas.width - xOffset, blockHeight*length)
+        ctx.font = '12px Arial';
+        console.log("TEXT", event.title)
+        ctx.fillText(event.title, xOffset, yPosition + 12);
 
         // Store the event position for click handling
         events[index].yPosition = yPosition;
     });
+
+    // timelineCanvas.addEventListener('click', (event) => {
+    //     const clickY = event.offsetY;
+    
+    //     const clickedEvent = todaysEvents.find(evt => clickY >= evt.yPosition && clickY <= evt.yPosition + 60);
+    //     if (clickedEvent) {
+    //         openModal(clickedEvent);
+    //     }
+    // });
+
+    // 
+    histdisp.innerHTML ="";
+    todaysEvents.forEach((event)=>{
+        const element = document.createElement("div");
+        const title = document.createElement("p");
+        title.textContent=event.title;
+        const date = document.createElement("p");
+        date.textContent=event.date;
+        const time = document.createElement("p");
+        time.textContent=event.startTime +"-"+event.endTime;
+        const score =document.createElement("p");
+        score.textContent=event.score;
+        const desc = document.createElement("p")
+        desc.textContent=event.description;
+
+        element.appendChild(title)
+        element.appendChild(date)
+        element.appendChild(time)
+        element.appendChild(score)
+        element.appendChild(desc)
+
+        element.style.border="1px solid black";
+        element.style.marginBottom="3px";
+
+        element.addEventListener("click", ()=>{
+            openModal(event)
+        })
+        histdisp.appendChild(element);
+    })
 }
 
+
 // Handle clicking on the canvas to edit event
-timelineCanvas.addEventListener('click', (event) => {
-    const clickY = event.offsetY;
-    const clickedEvent = events.find(evt => clickY >= evt.yPosition && clickY <= evt.yPosition + 60);
-    if (clickedEvent) {
-        openModal(clickedEvent);
-    }
-});
+
 
 // Open modal with event data
 function openModal(event) {
@@ -186,8 +257,21 @@ function handleEditSubmit(event) {
     events[selectedEventIndex] = updatedEvent;
     localStorage.setItem('events', JSON.stringify(events));
 
+    triggerNoti("Edits saved.")
     eventModal.style.display = 'none';
     renderTimeline();
+}
+
+function triggerNoti(message){
+    console.log("noti triggered", message)
+    document.getElementById("notification").textContent=message;
+    document.getElementById("notidiv").classList.add("visible")
+    document.getElementById("notidiv").classList.remove("hidden")
+    setTimeout(()=>{
+        document.getElementById("notidiv").classList.add('hidden')
+        document.getElementById("notidiv").classList.remove("visible");
+    },3000)
+
 }
 
 document.getElementById("selectDate").addEventListener("change", ()=>{

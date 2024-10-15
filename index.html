@@ -10,45 +10,23 @@
 </head>
 <body>
     <div class="container">
-        <h1>Track Event</h1>
-        <form id="eventForm">
-            <div class="form-group1">
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
-            </div>
-            <div class="form-group2">
-                <label for="startTime">Start Time:</label>
-                <input type="time" id="startTime" name="startTime" required>
-            </div>
-            <div class="form-group2">
-                <label for="endTime">End Time:</label>
-                <input type="time" id="endTime" name="endTime" required>
-            </div>
-            <div class="form-group1">
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            <div class="form-group1">
-                <label for="description">Notes</label>
-                <textarea id="description" name="description"></textarea>
-            </div>
-            <div class="form-group1">
-                <label for="score">Flow Score</label>
-                <div id="scoreButtons" class="score-buttons">
-                    <!-- Score buttons will be rendered here -->
-                </div>
-            </div>
-            <button type="submit">Add</button>
-        </form>
+        <p id="today"></p>
     </div>
     <div class="container2">
         <h1>History</h1>
         <label for="selectDate">Selected Date</label>
         <input type="date" name="selectDate"id="selectDate">
+
+        <button id="showhistory">List</button>
+        <button id="showGraph">Graph</button>
+
         <!-- Canvas for timeline -->
         <canvas id="timelineCanvas" width="300" height="1200"></canvas>
-        <button id="showhistory">Show history</button>
-        <div id="history-display" class="container"></div>
+
+        <div id="history-display" style="display:none" class="container"></div>
+
+        <!-- add button -->
+        <button id="trigger">+</button>
 
         <!-- Modal for editing event -->
         <div id="eventModal" class="modal">
@@ -75,6 +53,46 @@
                     <button type="submit">Save Changes</button>
                 </form>
             </div>
+        </div>
+    </div>
+    <div id="formCC">
+        <div id="formContainer" class="container">
+            <h1>Track Event</h1>
+            <form id="eventForm">
+                <div class="form-group1">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group2">
+                    <label for="startTime">Start Time:</label>
+                    <input type="time" id="startTime" name="startTime" required>
+                </div>
+                <div class="form-group2">
+                    <label for="endTime">End Time:</label>
+                    <input type="time" id="endTime" name="endTime" required>
+                </div>
+                <div class="form-group1">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group1">
+                    <label for="description">Notes</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+                <div class="form-group1">
+                    <label for="score">Flow Score</label>
+                    <div id="scoreButtons" class="score-buttons">
+                        <!-- Score buttons will be rendered here -->
+                    </div>
+                </div>
+                <button type="submit">Add</button>
+            </form>
+            <button id="close">Close</button>
+        </div>
+    </div>
+    <div id="notidiv" class="hidden">
+        <div id="noti">
+            <p id="notification">No news</p>
         </div>
     </div>
 
