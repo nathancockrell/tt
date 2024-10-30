@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>TT</title>
     <link rel="stylesheet" href="styles.css">
@@ -12,13 +12,19 @@
     <div class="container">
         <p id="today"></p>
     </div>
+    <h1>History</h1>
     <div class="container2">
-        <h1>History</h1>
-        <label for="selectDate">Selected Date</label>
+        
+        <div id="selectDateContainer">
+            <label for="selectDate">Selected Date</label>
         <input type="date" name="selectDate"id="selectDate">
+        </div>
 
-        <button id="showhistory">List</button>
-        <button id="showGraph">Graph</button>
+        <div id="navContainer">
+            <button id="showhistory" style="width:50%; background-color: #404040;">List</button>
+            <button id="showGraph" style="width:50%;background-color: #707070;">Graph</button>
+        </div>
+        
 
         <!-- Canvas for timeline -->
         <canvas id="timelineCanvas" width="300" height="1200"></canvas>
@@ -50,11 +56,18 @@
                         <label for="editEndTime">End Time:</label>
                         <input type="time" id="editEndTime" name="editEndTime" required>
                     </div>
+                    <div class="form-group">
+                        <label for="score">Flow Score</label>
+                        <div id="editScoreButtonsContainer" class="score-buttons">
+                            <!-- Score buttons will be rendered here -->
+                        </div>
+                    </div>
                     <button type="submit">Save Changes</button>
                 </form>
             </div>
         </div>
     </div>
+
     <div id="formCC">
         <div id="formContainer" class="container">
             <h1>Track Event</h1>
@@ -92,6 +105,7 @@
     </div>
     <div id="notidiv" class="hidden">
         <div id="noti">
+            <p id="notiheader">Notification:</p>
             <p id="notification">No news</p>
         </div>
     </div>

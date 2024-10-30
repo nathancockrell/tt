@@ -180,9 +180,24 @@ canvas {
 #noti{
     background-color: #ccc;
     color:black;
-    width:400px;
+    width:380px;
     height:80px;
     font-size: 20px;
+    padding:10px;
+    margin:10px;
+    border:2px solid black
+}
+#notiheader {
+    color:grey
+}
+
+#selectDateContainer {
+    display:flex;
+    padding:5px;
+    background-color: black;
+}
+#navContainer {
+    display:flex;
 }
 
 .hidden {

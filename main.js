@@ -20,9 +20,9 @@ let shown="graph";
 histbtn.addEventListener("click",()=>{
     if(shown==="graph"){
         histdisp.style.display = 'block'
-        histbtn.style.backgroundColor="#545454"
+        histbtn.style.backgroundColor="#707070"
         timelineCanvas.style.display="none"
-        graphbtn.style.backgroundColor="#000000"
+        graphbtn.style.backgroundColor="#404040"
 
         shown="list";
     }else{
@@ -32,14 +32,15 @@ const graphbtn = document.getElementById("showGraph")
 graphbtn.addEventListener("click", ()=>{
     if(shown==="list"){
         timelineCanvas.style.display = 'block'
-        graphbtn.style.backgroundColor="#545454"
+        graphbtn.style.backgroundColor="#707070"
         histdisp.style.display="none"
-        histbtn.style.backgroundColor="#000000"
+        histbtn.style.backgroundColor="#404040"
 
         shown="graph";
     }else{
     }
 })
+graphbtn.style.backgroundColor="#707070"
 
 document.getElementById("close").addEventListener("click",()=>{
     document.getElementById("formCC").style.display="none";
@@ -52,7 +53,8 @@ document.getElementById("trigger").addEventListener("click",()=>{
 
 
 // Create score buttons and append to the scoreButtons div
-const scoreButtonsContainer = document.getElementById('scoreButtons');
+const scoreButtonsContainer = document.querySelectorAll('.score-buttons');
+console.log(scoreButtonsContainer)
 
 // Set today's date as default in the date input field
 function setTodaysDate() {
@@ -80,14 +82,15 @@ window.onload = function() {
 // Function to generate score buttons
 function generateScoreButtons() {
     for (let i = 0; i < 10; i++) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = i;
-        button.value = i;
+        for(let k = 0; k<scoreButtonsContainer.length;k++){
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = i;
+            button.value = i;
 
-        button.addEventListener('click', () => handleScoreSelect(i, button));
-
-        scoreButtonsContainer.appendChild(button);
+            button.addEventListener('click', () => handleScoreSelect(i, button, k));
+            scoreButtonsContainer[k].appendChild(button)
+        }
     }
 }
 
@@ -96,8 +99,8 @@ eventForm.addEventListener('submit', handleFormSubmit);
 editEventForm.addEventListener('submit', handleEditSubmit);
 
 // Handle score selection
-function handleScoreSelect(score, button) {
-    const buttons = scoreButtonsContainer.querySelectorAll('button');
+function handleScoreSelect(score, button, contIndex) {
+    const buttons = scoreButtonsContainer[contIndex].querySelectorAll('button');
     buttons.forEach(btn => btn.classList.remove('selected'));
     if(selectedScore==score){
         selectedScore=null;    
@@ -130,7 +133,7 @@ function handleFormSubmit(event) {
 
     eventForm.reset();
     selectedScore = null;
-    scoreButtonsContainer.querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
+    scoreButtonsContainer[1].querySelectorAll('button').forEach(btn => btn.classList.remove('selected'));
     setTodaysDate();
     renderTimeline();
     triggerNoti("Event saved.")
@@ -252,6 +255,7 @@ function handleEditSubmit(event) {
         description: document.getElementById('editDescription').value,
         startTime: document.getElementById('editStartTime').value,
         endTime: document.getElementById('editEndTime').value,
+        score: selectedScore
     };
 
     events[selectedEventIndex] = updatedEvent;
@@ -259,6 +263,7 @@ function handleEditSubmit(event) {
 
     triggerNoti("Edits saved.")
     eventModal.style.display = 'none';
+
     renderTimeline();
 }
 
