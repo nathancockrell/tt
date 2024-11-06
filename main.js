@@ -68,6 +68,36 @@ function setTodaysDate() {
     document.getElementById("selectDate").value = formattedDate;
     document.getElementById("today").textContent=formattedDate;
 }
+document.getElementById("yesterday").addEventListener("click", yesterday)
+document.getElementById("tomorrow").addEventListener("click", tomorrow)
+
+function yesterday(){
+    let current = document.getElementById("selectDate").value;
+    console.log(current)
+    let today = new Date();
+    let year = today.getFullYear();
+    let month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    let day = String(today.getDate()-1).padStart(2, '0');
+    
+    const formattedDate = `${year}-${month}-${day}`;
+    document.getElementById("selectDate").value = formattedDate;
+}
+
+function tomorrow(){
+    let newDate = new Date();
+}
+
+function moveSelectedDate(dir){
+    console.log("s")
+    let newDate = new Date();
+    console.log(newDate)
+    if(dir=="back"){
+
+    }else if(dir=="forward"){
+
+    }
+    document.getElementById("selectDate").value =newDate;
+}
 
 // Call the function to set the date when the page loads
 window.onload = function() {

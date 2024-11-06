@@ -12,18 +12,21 @@
     <div class="container">
         <p id="today"></p>
     </div>
-    <h1>History</h1>
+    <h1 style="color:white">History</h1>
     <div class="container2">
-        
+        <div id="navContainer">
+            <button id="showGraph" style="width:50%;background-color: #707070;">Graph</button>
+
+            <button id="showhistory" style="width:50%; background-color: #404040;">List</button>
+        </div>
         <div id="selectDateContainer">
-            <label for="selectDate">Selected Date</label>
-        <input type="date" name="selectDate"id="selectDate">
+            <!-- <label for="selectDate">Selected Date</label> -->
+             <button id="yesterday">-1</button>
+            <input type="date" name="selectDate"id="selectDate">
+            <button id="tomorrow">+1</button>
         </div>
 
-        <div id="navContainer">
-            <button id="showhistory" style="width:50%; background-color: #404040;">List</button>
-            <button id="showGraph" style="width:50%;background-color: #707070;">Graph</button>
-        </div>
+        
         
 
         <!-- Canvas for timeline -->
