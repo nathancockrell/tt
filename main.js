@@ -73,18 +73,33 @@ document.getElementById("tomorrow").addEventListener("click", tomorrow)
 
 function yesterday(){
     let current = document.getElementById("selectDate").value;
-    console.log(current)
-    let today = new Date();
-    let year = today.getFullYear();
-    let month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    let day = String(today.getDate()-1).padStart(2, '0');
+
+    let newD = new Date(current);
+    let year = newD.getFullYear();
+    let month = String(newD.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    let day = String(newD.getDate()).padStart(2, '0');
     
     const formattedDate = `${year}-${month}-${day}`;
+
     document.getElementById("selectDate").value = formattedDate;
+    renderTimeline();
 }
 
 function tomorrow(){
-    let newDate = new Date();
+    let current = document.getElementById("selectDate").value;
+    current = new Date(current)
+    current.setDate(current.getDate()+1)
+    const tomorrow = new Date(current);
+    tomorrow.setDate(current.getDate() + 1);
+
+    let year = tomorrow.getFullYear();
+    let month = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    let day = String(tomorrow.getDate()).padStart(2, '0');
+    
+    const formattedDate = `${year}-${month}-${day}`;
+
+    document.getElementById("selectDate").value = formattedDate;
+    renderTimeline();
 }
 
 function moveSelectedDate(dir){
@@ -262,7 +277,9 @@ function renderTimeline() {
 
 // Open modal with event data
 function openModal(event) {
-    const { title, description, startTime, endTime } = event;
+    console.log(event)
+    const { title, date, description, startTime, endTime } = event;
+    document.getElementById('editDate').value = date;
     document.getElementById('editTitle').value = title;
     document.getElementById('editDescription').value = description;
     document.getElementById('editStartTime').value = startTime;
@@ -281,6 +298,7 @@ function handleEditSubmit(event) {
     event.preventDefault();
     const updatedEvent = {
         ...events[selectedEventIndex],
+        date: document.getElementById('editDate').value,
         title: document.getElementById('editTitle').value,
         description: document.getElementById('editDescription').value,
         startTime: document.getElementById('editStartTime').value,

@@ -21,9 +21,9 @@
         </div>
         <div id="selectDateContainer">
             <!-- <label for="selectDate">Selected Date</label> -->
-             <button id="yesterday">-1</button>
+             <button id="yesterday" class="skip-button"><</button>
             <input type="date" name="selectDate"id="selectDate">
-            <button id="tomorrow">+1</button>
+            <button id="tomorrow" class="skip-button">></button>
         </div>
 
         
@@ -44,12 +44,16 @@
                 <h2>Edit Event</h2>
                 <form id="editEventForm">
                     <div class="form-group">
+                        <label for="editDate">Date:</label>
+                        <input type="date" id="editDate" name="editDate" required>
+                    </div>
+                    <div class="form-group">
                         <label for="editTitle">Title:</label>
                         <input type="text" id="editTitle" name="editTitle" required>
                     </div>
                     <div class="form-group">
                         <label for="editDescription">Description:</label>
-                        <textarea id="editDescription" name="editDescription" required></textarea>
+                        <textarea id="editDescription" name="editDescription"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="editStartTime">Start Time:</label>
