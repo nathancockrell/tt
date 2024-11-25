@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <title>Flags and Notes with Edit</title>
+    <title>TT</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,6 +23,10 @@
             color: white;
             padding: 1em;
             text-align: center;
+        }
+        
+        #new {
+            font-size: large;
         }
 
         .content {
@@ -92,7 +96,7 @@
         <h1>Flags and Notes</h1>
     </header>
     <div class="content">
-        <button class="btn" onclick="openAddModal()">Add Flag/Note</button>
+        <button id="new" class="btn" onclick="openAddModal()">Add Flag/Note</button>
 
         <div class="switch">
             <label>
