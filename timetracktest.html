@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>TT</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <p id="today"></p>
+    </div>
+    <h1 style="color:white">History</h1>
+    <div class="container2">
+        <div id="navContainer">
+            <button id="showGraph" style="width:50%;background-color: #707070;">Graph</button>
+
+            <button id="showhistory" style="width:50%; background-color: #404040;">List</button>
+        </div>
+        <div id="selectDateContainer">
+            <!-- <label for="selectDate">Selected Date</label> -->
+             <button id="yesterday" class="skip-button"><</button>
+            <input type="date" name="selectDate"id="selectDate">
+            <button id="tomorrow" class="skip-button">></button>
+        </div>
+
+        
+        
+
+        <!-- Canvas for timeline -->
+        <canvas id="timelineCanvas" width="300" height="1200"></canvas>
+
+        <div id="history-display" style="display:none" class="container"></div>
+
+        <!-- add button -->
+        <button id="trigger">+</button>
+
+        <!-- Modal for editing event -->
+        <div id="eventModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Edit Event</h2>
+                <form id="editEventForm">
+                    <div class="form-group">
+                        <label for="editDate">Date:</label>
+                        <input type="date" id="editDate" name="editDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTitle">Title:</label>
+                        <input type="text" id="editTitle" name="editTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Description:</label>
+                        <textarea id="editDescription" name="editDescription"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editStartTime">Start Time:</label>
+                        <input type="time" id="editStartTime" name="editStartTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editEndTime">End Time:</label>
+                        <input type="time" id="editEndTime" name="editEndTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="score">Flow Score</label>
+                        <div id="editScoreButtonsContainer" class="score-buttons">
+                            <!-- Score buttons will be rendered here -->
+                        </div>
+                    </div>
+                    <button type="submit">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="formCC">
+        <div id="formContainer" class="container">
+            <h1>Track Event</h1>
+            <form id="eventForm">
+                <div class="form-group1">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group2">
+                    <label for="startTime">Start Time:</label>
+                    <input type="time" id="startTime" name="startTime" required>
+                </div>
+                <div class="form-group2">
+                    <label for="endTime">End Time:</label>
+                    <input type="time" id="endTime" name="endTime" required>
+                </div>
+                <div class="form-group1">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group1">
+                    <label for="description">Notes</label>
+                    <textarea id="description" name="description"></textarea>
+                </div>
+                <div class="form-group1">
+                    <label for="score">Flow Score</label>
+                    <div id="scoreButtons" class="score-buttons">
+                        <!-- Score buttons will be rendered here -->
+                    </div>
+                </div>
+                <button type="submit">Add</button>
+            </form>
+            <button id="close">Close</button>
+        </div>
+    </div>
+    <div id="notidiv" class="hidden">
+        <div id="noti">
+            <p id="notiheader">Notification:</p>
+            <p id="notification">No news</p>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

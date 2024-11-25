@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+    <div id="main-container">
+        <div id="controls">Controls
+            <button id="add">Add</button>
+        </div>
+        <div id="display">
+            <div id="left">Left</div>
+            <div id="center"> | </div>
+            <div id="right">Right</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("add").addEventListener("click",()=>{
+            
+        })
+        
+        class Flag {
+            constructor(date,time,id){
+                this.date=date;
+                this.time=time;
+                this.id=id || Math.floor(Math.random()*1000);
+            }
+        }
+        let entries = [];
+        
+        for(let i=0;i<entries.length;i++){
+            const element = document.createElement("div");
+            console.log(entries[i].start)
+            element.style.top=`${entries[i].start*20}px`
+            element.style.height=`${entries[i].length*20}px`;
+            element.textContent=`${entries[i].name}`;
+            element.style.backgroundColor=`rgba(100,100,0,.5)`;
+            document.getElementById("left").appendChild(element);
+        }
+    </script>
+</body>
+</html>
