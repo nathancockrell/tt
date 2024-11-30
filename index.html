@@ -2,49 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- Enable web clip for iPhone -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="My Web App">
-    <title>TT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flags Manager</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
+            padding: 5px;
+            margin:0;
+            display:flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f5f5f5;
         }
 
-        header {
-            width: 100%;
-            background-color: #6200ea;
-            color: white;
-            padding: 1em;
-            text-align: center;
-        }
-        
-        #new {
-            font-size: large;
-        }
-
-        .content {
-            margin: 1em;
-            width: 90%;
-            max-width: 600px;
-        }
-
-        .btn {
-            background-color: #6200ea;
-            color: white;
-            border: none;
-            padding: 0.5em 1em;
-            border-radius: 5px;
-            cursor: pointer;
+        input {
+            font-size: 20px;
         }
 
         .modal {
@@ -59,68 +30,75 @@
             align-items: center;
         }
 
+        .content {
+            width:100%;
+            height:70vh;
+            overflow-y: auto;
+            border:1px solid grey;
+            max-width: 600px;
+        }
+
         .modal-content {
             background: white;
-            padding: 2em;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 10px;
             width: 90%;
             max-width: 500px;
         }
 
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .editBtn {
+            position:absolute;
+            top:5px;
+            right:5px;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
         .list-item {
-            background: white;
-            margin: 0.5em 0;
-            padding: 1em;
             border: 1px solid #ddd;
             border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            position:relative;
         }
 
-        .switch, .filter-section {
-            margin: 1em 0;
-        }
-
-        .label-list span {
-            display: inline-block;
-            margin-right: 0.5em;
-            padding: 0.2em 0.5em;
-            background: #e0e0e0;
-            border-radius: 3px;
-        }
-
-        .filter-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5em;
+        .list-item strong {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Flags and Notes</h1>
+        <h1>Flags Manager</h1>
+
     </header>
     <div class="content">
-        <button id="new" class="btn" onclick="openAddModal()">Add Flag/Note</button>
-
-        <div class="switch">
-            <label>
-                <input type="checkbox" id="toggleDisplay" onchange="toggleDisplay()">
-                <span>Show Notes</span>
-            </label>
-        </div>
-
-        <div class="filter-section">
-            <h4>Filter by Labels:</h4>
-            <div id="labelFilters"></div>
-        </div>
 
         <div id="listContainer"></div>
     </div>
+    <button class="btn" onclick="openAddModal()">Add Flag</button>
+
 
     <!-- Add Modal -->
     <div class="modal" id="addModal">
         <div class="modal-content">
-            <h2>Add Flag/Note</h2>
-            <form id="addForm" onsubmit="addEntry(event)">
+            <h2>Add Flag</h2>
+            <form id="addForm" onsubmit="addFlag(event)">
                 <label>
                     Title:
                     <input type="text" id="addTitle" required>
@@ -129,11 +107,6 @@
                 <label>
                     Duration (optional):
                     <input type="number" id="addDuration">
-                </label>
-                <br><br>
-                <label>
-                    Notes (optional):
-                    <textarea id="addNote"></textarea>
                 </label>
                 <br><br>
                 <label>
@@ -146,11 +119,6 @@
                     <input type="time" id="addTime">
                 </label>
                 <br><br>
-                <label>
-                    Labels (comma-separated):
-                    <input type="text" id="addLabels">
-                </label>
-                <br><br>
                 <button type="submit" class="btn">Save</button>
                 <button type="button" class="btn" onclick="closeModal('addModal')">Cancel</button>
             </form>
@@ -160,7 +128,7 @@
     <!-- Edit Modal -->
     <div class="modal" id="editModal">
         <div class="modal-content">
-            <h2>Edit Flag/Note</h2>
+            <h2>Edit Flag</h2>
             <form id="editForm" onsubmit="saveEdit(event)">
                 <label>
                     Title:
@@ -173,11 +141,6 @@
                 </label>
                 <br><br>
                 <label>
-                    Notes (optional):
-                    <textarea id="editNote"></textarea>
-                </label>
-                <br><br>
-                <label>
                     Date:
                     <input type="date" id="editDate">
                 </label>
@@ -187,13 +150,8 @@
                     <input type="time" id="editTime">
                 </label>
                 <br><br>
-                <label>
-                    Labels (comma-separated):
-                    <input type="text" id="editLabels">
-                </label>
-                <br><br>
                 <button type="submit" class="btn">Save Changes</button>
-                <button type="button" class="btn" onclick="deleteItem()">Delete</button>
+                <button type="button" class="btn" onclick="deleteFlag()">Delete</button>
                 <button type="button" class="btn" onclick="closeModal('editModal')">Cancel</button>
             </form>
         </div>
@@ -201,106 +159,49 @@
 
     <script>
         let flags = JSON.parse(localStorage.getItem('flags')) || [];
-        let notes = JSON.parse(localStorage.getItem('notes')) || [];
-        let selectedLabels = [];
         let currentEditIndex = null;
-        let editingNotes = false;
 
         const listContainer = document.getElementById('listContainer');
-        const labelFilters = document.getElementById('labelFilters');
 
         function saveToLocalStorage() {
             localStorage.setItem('flags', JSON.stringify(flags));
-            localStorage.setItem('notes', JSON.stringify(notes));
         }
 
-        function getAllLabels() {
-            const allLabels = new Set();
-            [...flags, ...notes].forEach(item => {
-                if (item.labels) {
-                    item.labels.forEach(label => allLabels.add(label));
-                }
-            });
-            return Array.from(allLabels);
-        }
-
-        function renderFilters() {
-            labelFilters.innerHTML = '';
-            const allLabels = getAllLabels();
-            allLabels.forEach(label => {
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <label>
-                        <input type="checkbox" value="${label}" onchange="toggleLabelFilter(this)">
-                        ${label}
-                    </label>
-                `;
-                labelFilters.appendChild(div);
-            });
-        }
-
-        function toggleLabelFilter(checkbox) {
-            const label = checkbox.value;
-            if (checkbox.checked) {
-                selectedLabels.push(label);
-            } else {
-                selectedLabels = selectedLabels.filter(l => l !== label);
-            }
-            toggleDisplay();
-        }
-
-        function matchesSelectedLabels(item) {
-            if (selectedLabels.length === 0) return true;
-            return item.labels && item.labels.some(label => selectedLabels.includes(label));
-        }
-
-        function renderList(showNotes) {
+        function renderList() {
             listContainer.innerHTML = '';
-            const list = showNotes ? notes : flags;
-            list.sort((a, b) => new Date(b.date) - new Date(a.date));
+            flags.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-            list.filter(matchesSelectedLabels).forEach((item, index) => {
+            flags.forEach((flag, index) => {
                 const div = document.createElement('div');
                 div.className = 'list-item';
                 div.innerHTML = `
                     <div>
-                        <strong>${item.title || 'Untitled'}</strong>
-                        <p>${new Date(item.date).toLocaleString()}</p>
-                        ${item.duration ? `<p>Duration: ${item.duration} mins</p>` : ''}
-                        ${showNotes && item.note ? `<p>${item.note}</p>` : ''}
-                        <div class="label-list">
-                            ${(item.labels || []).map(label => `<span>${label}</span>`).join('')}
-                        </div>
+                        <strong>${flag.title || 'Untitled'}</strong>
+                        <p>${new Date(flag.date).toLocaleString()}</p>
+                        ${flag.duration ? `<p>Duration: ${flag.duration} mins</p>` : ''}
                     </div>
-                    <button class="btn" onclick="openEditModal(${index}, ${showNotes})">Edit</button>
+                    <button class="btn editBtn" onclick="openEditModal(${index})">Edit</button>
                 `;
                 listContainer.appendChild(div);
             });
         }
 
-        function toggleDisplay() {
-            const showNotes = document.getElementById('toggleDisplay').checked;
-            renderList(showNotes);
-        }
-
         function openAddModal() {
+            document.getElementById("addTitle").focus();
             const now = new Date();
             document.getElementById('addDate').value = now.toISOString().slice(0, 10);
             document.getElementById('addTime').value = now.toTimeString().slice(0, 5);
             document.getElementById('addModal').style.display = 'flex';
         }
 
-        function openEditModal(index, isNote) {
+        function openEditModal(index) {
             currentEditIndex = index;
-            editingNotes = isNote;
 
-            const item = isNote ? notes[index] : flags[index];
-            document.getElementById('editTitle').value = item.title || '';
-            document.getElementById('editDuration').value = item.duration || '';
-            document.getElementById('editNote').value = item.note || '';
-            document.getElementById('editDate').value = item.date.split('T')[0];
-            document.getElementById('editTime').value = new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('editLabels').value = (item.labels || []).join(', ');
+            const flag = flags[index];
+            document.getElementById('editTitle').value = flag.title || '';
+            document.getElementById('editDuration').value = flag.duration || '';
+            document.getElementById('editDate').value = flag.date.split('T')[0];
+            document.getElementById('editTime').value = new Date(flag.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
             document.getElementById('editModal').style.display = 'flex';
         }
@@ -309,28 +210,21 @@
             document.getElementById(modalId).style.display = 'none';
         }
 
-        function addEntry(event) {
+        function addFlag(event) {
             event.preventDefault();
 
             const title = document.getElementById('addTitle').value;
             const duration = document.getElementById('addDuration').value;
-            const note = document.getElementById('addNote').value;
             const dateInput = document.getElementById('addDate').value;
             const timeInput = document.getElementById('addTime').value;
-            const labels = document.getElementById('addLabels').value.split(',').map(l => l.trim()).filter(l => l);
 
             const date = new Date(`${dateInput}T${timeInput}:00`).toISOString();
 
-            flags.push({ title, duration, date, labels });
-
-            if (note) {
-                notes.push({ title, note, date, labels });
-            }
+            flags.push({ title, duration, date });
 
             saveToLocalStorage();
             closeModal('addModal');
-            renderFilters();
-            toggleDisplay();
+            renderList();
         }
 
         function saveEdit(event) {
@@ -338,35 +232,28 @@
 
             const title = document.getElementById('editTitle').value;
             const duration = document.getElementById('editDuration').value;
-            const note = document.getElementById('editNote').value;
             const dateInput = document.getElementById('editDate').value;
             const timeInput = document.getElementById('editTime').value;
-            const labels = document.getElementById('editLabels').value.split(',').map(l => l.trim()).filter(l => l);
 
             const date = new Date(`${dateInput}T${timeInput}:00`).toISOString();
 
-            const list = editingNotes ? notes : flags;
-            list[currentEditIndex] = { ...list[currentEditIndex], title, duration, note, date, labels };
+            flags[currentEditIndex] = { ...flags[currentEditIndex], title, duration, date };
 
             saveToLocalStorage();
             closeModal('editModal');
-            renderFilters();
-            toggleDisplay();
+            renderList();
         }
 
-        function deleteItem() {
-            const list = editingNotes ? notes : flags;
-            list.splice(currentEditIndex, 1);
+        function deleteFlag() {
+            flags.splice(currentEditIndex, 1);
 
             saveToLocalStorage();
             closeModal('editModal');
-            renderFilters();
-            toggleDisplay();
+            renderList();
         }
 
         // Initialize the app
-        renderFilters();
-        toggleDisplay();
+        renderList();
     </script>
 </body>
 </html>
