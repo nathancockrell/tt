@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Enable web clip for iPhone -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="My Web App">
     <title>Flags Manager</title>
     <style>
         body {
@@ -80,6 +85,10 @@
             font-size: 1.2em;
             margin-bottom: 5px;
         }
+        #addBtn{
+            font-size: 20px;
+            padding:20px 40px;
+        }
     </style>
 </head>
 <body>
@@ -91,7 +100,7 @@
 
         <div id="listContainer"></div>
     </div>
-    <button class="btn" onclick="openAddModal()">Add Flag</button>
+    <button id="addBtn" class="btn" onclick="openAddModal()">Add Flag</button>
 
 
     <!-- Add Modal -->
