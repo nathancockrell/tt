@@ -23,6 +23,10 @@
             font-size: 20px;
         }
 
+        form {
+            text-align: right;
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -54,7 +58,7 @@
         .btn {
             padding: 10px 20px;
             margin: 5px;
-            background: #007bff;
+            background: #888888;
             color: white;
             border: none;
             border-radius: 5px;
@@ -65,10 +69,11 @@
             position:absolute;
             top:5px;
             right:5px;
+            
         }
 
         .btn:hover {
-            background: #0056b3;
+            background: #676767;
         }
 
         .list-item {
@@ -85,6 +90,26 @@
             font-size: 1.2em;
             margin-bottom: 5px;
         }
+
+        .submit {
+            font-size: 18px;
+        }
+        .cancel {
+            font-size: 18px;
+            background-color: white;
+            border:1px solid #888888;
+            color: black;
+        }
+        .cancel:hover {
+            background-color: #ddd;
+        }
+        .delete {
+            font-size:18px;
+            background-color: white;
+            border:1px solid #888888;
+            color: #888888;
+        }
+
         #addBtn{
             font-size: 20px;
             padding:20px 40px;
@@ -109,16 +134,6 @@
             <h2>Add Flag</h2>
             <form id="addForm" onsubmit="addFlag(event)">
                 <label>
-                    Title:
-                    <input type="text" id="addTitle" required>
-                </label>
-                <br><br>
-                <label>
-                    Duration (optional):
-                    <input type="number" id="addDuration">
-                </label>
-                <br><br>
-                <label>
                     Date:
                     <input type="date" id="addDate">
                 </label>
@@ -128,8 +143,19 @@
                     <input type="time" id="addTime">
                 </label>
                 <br><br>
-                <button type="submit" class="btn">Save</button>
-                <button type="button" class="btn" onclick="closeModal('addModal')">Cancel</button>
+                <label>
+                    Title:
+                    <input type="text" id="addTitle" required>
+                </label>
+                <br><br>
+                <label>
+                    Duration (min):
+                    <input type="number" id="addDuration">
+                </label>
+                <br><br>
+                
+                <button type="submit" class="btn submit">Save</button>
+                <button type="button" class="btn cancel" onclick="closeModal('addModal')">Cancel</button>
             </form>
         </div>
     </div>
@@ -140,16 +166,6 @@
             <h2>Edit Flag</h2>
             <form id="editForm" onsubmit="saveEdit(event)">
                 <label>
-                    Title:
-                    <input type="text" id="editTitle" required>
-                </label>
-                <br><br>
-                <label>
-                    Duration (optional):
-                    <input type="number" id="editDuration">
-                </label>
-                <br><br>
-                <label>
                     Date:
                     <input type="date" id="editDate">
                 </label>
@@ -159,9 +175,20 @@
                     <input type="time" id="editTime">
                 </label>
                 <br><br>
-                <button type="submit" class="btn">Save Changes</button>
-                <button type="button" class="btn" onclick="deleteFlag()">Delete</button>
-                <button type="button" class="btn" onclick="closeModal('editModal')">Cancel</button>
+                <label>
+                    Title:
+                    <input type="text" id="editTitle" required>
+                </label>
+                <br><br>
+                <label>
+                    Duration (min):
+                    <input type="number" id="editDuration">
+                </label>
+                <br><br>
+                
+                <button type="submit" class="btn submit">Save Changes</button>
+                <button type="button" class="btn delete" onclick="deleteFlag()">Delete</button>
+                <button type="button" class="btn cancel" onclick="closeModal('editModal')">Cancel</button>
             </form>
         </div>
     </div>
@@ -196,11 +223,12 @@
         }
 
         function openAddModal() {
-            document.getElementById("addTitle").focus();
             const now = new Date();
             document.getElementById('addDate').value = now.toISOString().slice(0, 10);
             document.getElementById('addTime').value = now.toTimeString().slice(0, 5);
             document.getElementById('addModal').style.display = 'flex';
+            document.getElementById("addTitle").focus();
+
         }
 
         function openEditModal(index) {
@@ -234,6 +262,10 @@
             saveToLocalStorage();
             closeModal('addModal');
             renderList();
+            document.getElementById('addTitle').value = "";
+            document.getElementById('addDuration').value= "";
+            document.getElementById('addDate').value= "";
+            document.getElementById('addTime').value= "";
         }
 
         function saveEdit(event) {
